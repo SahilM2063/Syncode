@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  syncode:
+    image: postgres
+    restart: always
+    container_name: syncode
+    environment:
+      POSTGRES_PASSWORD: exmaple
+      PGDATA : /data/postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/data/postgres
+
+volumes:
+  postgres:
