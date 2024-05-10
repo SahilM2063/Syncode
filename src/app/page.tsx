@@ -12,7 +12,9 @@ import {
 import { Room } from "@/db/schema";
 import { GithubIcon } from "lucide-react";
 import { getRooms } from "@/data-access/rooms";
-import TagList, { splitTags } from "@/components/ui/tag-list";
+import TagList from "@/components/ui/tag-list";
+import { SearchBar } from "./search-bar";
+import { splitTags } from "@/lib/utils";
 
 export function RoomCard({ room }: { room: Room }) {
   return (
@@ -34,7 +36,7 @@ export function RoomCard({ room }: { room: Room }) {
           </Link>
         )}
       </CardContent>
-      <CardContent className="flex w-full gap-2 flex-wrap" >
+      <CardContent className="flex w-full gap-2 flex-wrap">
         <TagList tags={splitTags(room.tags || "")} />
       </CardContent>
       <CardFooter>
@@ -46,8 +48,12 @@ export function RoomCard({ room }: { room: Room }) {
   );
 }
 
-export default async function Home() {
-  const rooms = await getRooms();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { search: string };
+}) {
+  const rooms = await getRooms(searchParams?.search);
 
   return (
     <main className="min-h-screen p-16">
@@ -56,6 +62,10 @@ export default async function Home() {
         <Button asChild>
           <Link href={"/create-room"}>Create Room</Link>
         </Button>
+      </div>
+
+      <div className="mb-6">
+        <SearchBar />
       </div>
 
       <div className="grid grid-cols-3 gap-4">

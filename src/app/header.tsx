@@ -33,17 +33,16 @@ export function AccountDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {isLoggedIn ? (
-          <DropdownMenuItem onClick={() => signOut()}>
-            <LogOut className="mr-2" />
-            Sign Out
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem onClick={() => signIn("google")}>
-            <LogIn className="mr-2" />
-            Sign In
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem
+          onClick={() =>
+            signOut({
+              callbackUrl: "/",
+            })
+          }
+        >
+          <LogOut className="mr-2" />
+          Sign Out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -51,7 +50,6 @@ export function AccountDropdown() {
 
 export function Header() {
   const session = useSession();
-
   return (
     <header className="bg-gray-200 dark:bg-gray-900 py-4 container mx-auto ">
       <div className="flex justify-between items-center">
@@ -62,7 +60,13 @@ export function Header() {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          <AccountDropdown />
+          {session.data && <AccountDropdown />}
+          {!session.data && (
+            <Button variant="default" onClick={() => signIn("google")}>
+              <LogIn className="mr-2" />
+              Sign In
+            </Button>
+          )}
           <ModeToggle />
         </div>
       </div>

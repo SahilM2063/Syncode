@@ -1,16 +1,22 @@
-import { Badge } from "@/components/ui/badge";
-
-export function splitTags(tags: string) {
-  return tags.split(",").map((tag) => tag.trim());
-}
+"use client";
+import { Badge, badgeVariants } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function TagList({ tags }: { tags: string[] }) {
+  const router = useRouter();
   return (
     tags &&
     tags.map((tag) => (
-      <Badge key={tag} variant={"default"} className="cursor-pointer">
+      <button
+        onClick={() => router.push(`/?search=${tag}`)}
+        key={tag}
+        className={cn(badgeVariants()) + "cursor-pointer"}
+        tabIndex={0}
+        role="button"
+      >
         {tag}
-      </Badge>
+      </button>
     ))
   );
 }
