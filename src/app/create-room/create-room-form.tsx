@@ -21,7 +21,7 @@ const formSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string().min(1).max(100),
   githubRepo: z.string().min(1).max(100),
-  language: z.string().min(1).max(50),
+  tags: z.string().min(1).max(50),
 });
 
 export function CreateRoomForm() {
@@ -32,6 +32,8 @@ export function CreateRoomForm() {
     defaultValues: {
       name: "",
       description: "",
+      githubRepo: "",
+      tags: "",
     },
   });
 
@@ -50,7 +52,7 @@ export function CreateRoomForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="WebRTC Coding" />
               </FormControl>
               <FormDescription>Enter your room name</FormDescription>
               <FormMessage />
@@ -64,7 +66,10 @@ export function CreateRoomForm() {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  {...field}
+                  placeholder="Working with webRTC Client ... "
+                />
               </FormControl>
               <FormDescription>Please describe your room.</FormDescription>
               <FormMessage />
@@ -78,7 +83,7 @@ export function CreateRoomForm() {
             <FormItem>
               <FormLabel>Github Repo</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="https://github.com/user/repo" />
               </FormControl>
               <FormDescription>
                 Please put a link to the project your are working on
@@ -89,15 +94,16 @@ export function CreateRoomForm() {
         />
         <FormField
           control={form.control}
-          name="language"
+          name="tags"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Primary Programming Language</FormLabel>
+              <FormLabel>Tags</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="typescript, nextjs, react" />
               </FormControl>
               <FormDescription>
-                List primary programming language you are working with
+                List your programming languages, libraries or tools your are
+                using in this room
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -25,7 +25,8 @@ export function AccountDropdown() {
           <Avatar className="mr-2">
             <AvatarImage src={session.data?.user?.image || ""} alt="@shadcn" />
             <AvatarFallback>
-              {session.data?.user?.name?.charAt(0)}
+              {!session.data?.user?.image &&
+                session.data?.user?.name?.charAt(0)}
             </AvatarFallback>
           </Avatar>
           {session.data?.user.name}

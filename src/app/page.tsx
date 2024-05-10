@@ -12,13 +12,14 @@ import {
 import { Room } from "@/db/schema";
 import { GithubIcon } from "lucide-react";
 import { getRooms } from "@/data-access/rooms";
+import TagList, { splitTags } from "@/components/ui/tag-list";
 
 export function RoomCard({ room }: { room: Room }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>{room.name}</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardDescription>{room.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {room.githubRepo && (
@@ -33,9 +34,12 @@ export function RoomCard({ room }: { room: Room }) {
           </Link>
         )}
       </CardContent>
+      <CardContent className="flex w-full gap-2 flex-wrap" >
+        <TagList tags={splitTags(room.tags || "")} />
+      </CardContent>
       <CardFooter>
         <Button asChild>
-          <Link href={`/room/${room.id}`}>Join Room</Link>
+          <Link href={`/rooms/${room.id}`}>Join Room</Link>
         </Button>
       </CardFooter>
     </Card>
