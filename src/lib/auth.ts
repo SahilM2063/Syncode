@@ -51,6 +51,8 @@ export const authConfig = {
       return session;
     },
   },
+  debug: true,
+  secret: process.env.NEXTAUTH_SECRET!,
 } satisfies AuthOptions;
 
 export function getSession() {
