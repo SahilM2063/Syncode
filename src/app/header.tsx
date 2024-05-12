@@ -11,12 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogIn, LogOut } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 export function AccountDropdown() {
   const session = useSession();
-  const isLoggedIn = !!session.data;
 
   return (
     <DropdownMenu>
@@ -33,14 +31,18 @@ export function AccountDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem>
+          <Link href={"/your-rooms"}>Your Rooms</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
+          className="curser-pointer"
           onClick={() =>
             signOut({
               callbackUrl: "/",
             })
           }
         >
-          <LogOut className="mr-2" />
+          <LogOut className="mr-2 size-4" />
           Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -51,8 +53,8 @@ export function AccountDropdown() {
 export function Header() {
   const session = useSession();
   return (
-    <header className="bg-gray-200 dark:bg-gray-900 py-4 container mx-auto ">
-      <div className="flex justify-between items-center">
+    <header className="bg-gray-200 dark:bg-gray-900 py-4 px-8 h-[80px]">
+      <div className="flex justify-between items-center w-full h-full">
         <div className="flex items-center gap-4 cursor-pointer">
           <Link href={"/"}>
             {/* <Image src={"/logo.png"} alt="logo" width={100} height={100} /> */}
@@ -63,7 +65,7 @@ export function Header() {
           {session.data && <AccountDropdown />}
           {!session.data && (
             <Button variant="default" onClick={() => signIn("google")}>
-              <LogIn className="mr-2" />
+              <LogIn className="mr-2 size-4" />
               Sign In
             </Button>
           )}

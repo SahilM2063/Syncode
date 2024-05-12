@@ -4,10 +4,11 @@ import Link from "next/link";
 import TagList from "@/components/ui/tag-list";
 import { SyncodeVideo } from "./video-player";
 import { splitTags } from "@/lib/utils";
+import { unstable_noStore } from "next/cache";
 
 export default async function RoomPage(props: { params: { roomId: string } }) {
+  unstable_noStore();
   const roomId = props.params.roomId;
-
   const room = await getRoom(roomId);
 
   if (!room) {

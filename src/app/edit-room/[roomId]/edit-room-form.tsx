@@ -11,11 +11,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage, 
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createRoomAction } from "./action";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Room } from "@/db/schema";
+import { editRoomAction } from "./action";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -24,21 +25,25 @@ const formSchema = z.object({
   tags: z.string().min(1).max(50),
 });
 
-export function CreateRoomForm() {
+export function EditRoomForm({ room }: { room: Room }) {
   const router = useRouter();
+  const params = useParams();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      githubRepo: "",
-      tags: "",
+      name: room.name,
+      description: room.description ?? "",
+      githubRepo: room.githubRepo ?? "",
+      tags: room.tags ?? "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createRoomAction(values);
+    await editRoomAction({
+      ...values,
+      id: params.roomId as string,
+    });
     router.push("/");
   }
 
