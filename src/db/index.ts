@@ -1,19 +1,12 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import * as schema from "./schema";
-import postgres from "postgres";
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+import { sql } from "@vercel/postgres";
+import * as schema from "./schema"; // Assuming you have a schema file similar to your original setup
 
-declare global {
-  var db: PostgresJsDatabase<typeof schema>;
-}
-let db: PostgresJsDatabase<typeof schema>;
+// Initialize the database connection using Vercel's PostgreSQL client
+const db = drizzle(sql, { schema });
 
-if (process.env.NODE_ENV === "production") {
-  db = drizzle(postgres(process.env.DB_URL!), { schema });
-} else {
-  if (!global.db) {
-    global.db = drizzle(postgres(process.env.DB_URL!), { schema });
-  }
-  db = global.db;
-}
+// Export the database instance
 export { db };
+
+// If you have specific tables or queries you want to export, you can define them here
+// For example, if you had a table definition in your original code, you would adapt it to use Vercel's syntax

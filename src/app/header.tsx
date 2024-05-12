@@ -10,43 +10,99 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn, LogOut, Trash } from "lucide-react";
 import Link from "next/link";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import { useState } from "react";
+import { deleteAccountAction } from "./action";
 
 export function AccountDropdown() {
   const session = useSession();
+  const [open, setOpen] = useState(false);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"link"}>
-          <Avatar className="mr-2">
-            <AvatarImage src={session.data?.user?.image || ""} alt="@shadcn" />
-            <AvatarFallback>
-              {!session.data?.user?.image &&
-                session.data?.user?.name?.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          {session.data?.user.name}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>
-          <Link href={"/your-rooms"}>Your Rooms</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="curser-pointer"
-          onClick={() =>
-            signOut({
-              callbackUrl: "/",
-            })
-          }
-        >
-          <LogOut className="mr-2 size-4" />
-          Sign Out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                await deleteAccountAction();
+                signOut({
+                  callbackUrl: "/",
+                });
+              }}
+            >
+              Yes, delete account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"link"}>
+            <Avatar className="mr-2">
+              <AvatarImage
+                src={session.data?.user?.image || ""}
+                alt="@shadcn"
+              />
+              <AvatarFallback>
+                {!session.data?.user?.image &&
+                  session.data?.user?.name?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            {session.data?.user.name}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>
+            <Link href={"/your-rooms"}>Your Rooms</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="curser-pointer"
+            onClick={() =>
+              signOut({
+                callbackUrl: "/",
+              })
+            }
+          >
+            <LogOut className="mr-2 size-4" />
+            Sign Out
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Button
+              onClick={() => setOpen(true)}
+              variant={"destructive"}
+              className="w-full flex justify-between"
+            >
+              <Trash className="mr-2 size-4" /> Delete Account
+            </Button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 

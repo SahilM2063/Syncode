@@ -22,6 +22,6 @@ export async function editRoomAction(roomData: Omit<Room, "userId">) {
   await editRoom({ ...roomData, userId: room.userId });
 
   revalidatePath("/your-rooms");
-  redirect(`edit-room/${roomData.id}`);
+  revalidatePath(`edit-room/${roomData.id}`)
   redirect("/your-rooms");
 }

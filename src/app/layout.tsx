@@ -4,6 +4,7 @@ import "./globals.css";
 import { Provider } from "./provider";
 import { Header } from "./header";
 import NextTopLaoder from "nextjs-toploader";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,13 +23,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={
-          inter.className + "flex flex-col justify-between items-center h-screen"
+          inter.className +
+          "flex flex-col justify-between items-center h-screen"
         }
       >
         <Provider>
           <NextTopLaoder />
           <Header />
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>
